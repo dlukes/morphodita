@@ -60,9 +60,22 @@ bool unicode_tokenizer::emergency_sentence_split(const vector<token_range>& toke
   using namespace unilib;
 
   // Implement emergency splitting for large sentences
-  return tokens.size() >= 500 ||
-         (tokens.size() >= 450 && chars[tokens.back().start].cat & unicode::P) ||
-         (tokens.size() >= 400 && chars[tokens.back().start].cat & unicode::Po);
+  if (tokens.size() >= 500 ||
+      (tokens.size() >= 450 && chars[tokens.back().start].cat & unicode::P) ||
+      (tokens.size() >= 400 && chars[tokens.back().start].cat & unicode::Po)) {
+    size_t last_i = tokens.back().start + tokens.back().length - 1;
+    // If one of the last 10 codepoints is &, don't sentence split (yet), to
+    // make sure encoded Unicode entities are kept within one sentence. These
+    // entities look like &U12345678;, so they're 11 codepoints long. If the
+    // last token ends with 8, the & is the 10th codepoint from the back, and
+    // this is the last position we shouldn't split at yet. Once we reach ;,
+    // & is 11th from the back and we are free to split (after the ;).
+    for (size_t i = last_i; i > last_i - 10; i--) {
+      if (chars[i].chr == U'&') return false;
+    }
+    return true;
+  }
+  return false;
 }
 
 bool unicode_tokenizer::is_eos(const vector<token_range>& tokens, char32_t eos_chr, const unordered_set<string>* abbreviations) {
