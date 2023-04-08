@@ -14,16 +14,26 @@ namespace ufal {
 namespace morphodita {
 
 
+static const char _czech_tokenizer_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1,
+	3, 1, 4, 1, 5, 1, 6, 1,
+	7, 1, 8, 1, 9, 1, 10
+};
+
 static const char _czech_tokenizer_cond_offsets[] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 
-	2, 2, 2, 2, 2, 2, 2, 2, 
-	2, 2, 2, 2, 2, 2, 2
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2
 };
 
 static const char _czech_tokenizer_cond_lengths[] = {
-	0, 0, 0, 0, 0, 0, 0, 2, 
-	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 2, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0
 };
 
 static const short _czech_tokenizer_cond_keys[] = {
@@ -35,110 +45,137 @@ static const char _czech_tokenizer_cond_spaces[] = {
 };
 
 static const unsigned char _czech_tokenizer_key_offsets[] = {
-	0, 0, 17, 29, 43, 46, 51, 54, 
-	89, 94, 98, 101, 105, 110, 111, 116, 
-	117, 122, 136, 143, 148, 151, 163
+	0, 0, 17, 29, 43, 47, 51, 55,
+	59, 63, 67, 71, 75, 76, 77, 80,
+	85, 88, 124, 129, 133, 136, 140, 145,
+	146, 151, 152, 157, 171, 172, 173, 180,
+	185, 188, 200
 };
 
 static const short _czech_tokenizer_trans_keys[] = {
-	13u, 32u, 34u, 40u, 91u, 96u, 123u, 129u, 
-	133u, 135u, 147u, 150u, 162u, 9u, 10u, 65u, 
-	90u, 34u, 40u, 91u, 96u, 123u, 129u, 133u, 
-	135u, 150u, 162u, 65u, 90u, 13u, 32u, 34u, 
-	39u, 41u, 59u, 93u, 125u, 139u, 141u, 147u, 
-	161u, 9u, 10u, 159u, 48u, 57u, 43u, 45u, 
-	159u, 48u, 57u, 159u, 48u, 57u, 9u, 10u, 
-	13u, 32u, 33u, 44u, 46u, 47u, 63u, 129u, 
-	131u, 135u, 142u, 147u, 157u, 159u, 160u, 301u, 
-	557u, 811u, 1067u, 0u, 42u, 48u, 57u, 58u, 
-	64u, 65u, 90u, 91u, 96u, 97u, 122u, 123u, 
-	255u, 9u, 10u, 13u, 32u, 147u, 9u, 13u, 
-	32u, 147u, 9u, 32u, 147u, 9u, 10u, 32u, 
-	147u, 9u, 10u, 13u, 32u, 147u, 13u, 9u, 
-	10u, 13u, 32u, 147u, 10u, 9u, 10u, 13u, 
-	32u, 147u, 13u, 32u, 34u, 39u, 41u, 59u, 
-	93u, 125u, 139u, 141u, 147u, 161u, 9u, 10u, 
-	44u, 46u, 69u, 101u, 159u, 48u, 57u, 69u, 
-	101u, 159u, 48u, 57u, 159u, 48u, 57u, 129u, 
-	131u, 135u, 151u, 155u, 157u, 65u, 90u, 97u, 
-	122u, 142u, 143u, 159u, 48u, 57u, 0
+	13u, 32u, 34u, 40u, 91u, 96u, 123u, 129u,
+	133u, 135u, 147u, 150u, 162u, 9u, 10u, 65u,
+	90u, 34u, 40u, 91u, 96u, 123u, 129u, 133u,
+	135u, 150u, 162u, 65u, 90u, 13u, 32u, 34u,
+	39u, 41u, 59u, 93u, 125u, 139u, 141u, 147u,
+	161u, 9u, 10u, 48u, 57u, 97u, 102u, 48u,
+	57u, 97u, 102u, 48u, 57u, 97u, 102u, 48u,
+	57u, 97u, 102u, 48u, 57u, 97u, 102u, 48u,
+	57u, 97u, 102u, 48u, 57u, 97u, 102u, 48u,
+	57u, 97u, 102u, 59u, 117u, 159u, 48u, 57u,
+	43u, 45u, 159u, 48u, 57u, 159u, 48u, 57u,
+	9u, 10u, 13u, 32u, 33u, 38u, 44u, 46u,
+	47u, 63u, 129u, 131u, 135u, 142u, 147u, 157u,
+	159u, 160u, 301u, 557u, 811u, 1067u, 0u, 42u,
+	48u, 57u, 58u, 64u, 65u, 90u, 91u, 96u,
+	97u, 122u, 123u, 255u, 9u, 10u, 13u, 32u,
+	147u, 9u, 13u, 32u, 147u, 9u, 32u, 147u,
+	9u, 10u, 32u, 147u, 9u, 10u, 13u, 32u,
+	147u, 13u, 9u, 10u, 13u, 32u, 147u, 10u,
+	9u, 10u, 13u, 32u, 147u, 13u, 32u, 34u,
+	39u, 41u, 59u, 93u, 125u, 139u, 141u, 147u,
+	161u, 9u, 10u, 85u, 38u, 44u, 46u, 69u,
+	101u, 159u, 48u, 57u, 69u, 101u, 159u, 48u,
+	57u, 159u, 48u, 57u, 129u, 131u, 135u, 151u,
+	155u, 157u, 65u, 90u, 97u, 122u, 142u, 143u,
+	159u, 48u, 57u, 0
 };
 
 static const char _czech_tokenizer_single_lengths[] = {
-	0, 13, 10, 12, 1, 3, 1, 21, 
-	5, 4, 3, 4, 5, 1, 5, 1, 
-	5, 12, 5, 3, 1, 6, 1
+	0, 13, 10, 12, 0, 0, 0, 0,
+	0, 0, 0, 0, 1, 1, 1, 3,
+	1, 22, 5, 4, 3, 4, 5, 1,
+	5, 1, 5, 12, 1, 1, 5, 3,
+	1, 6, 1
 };
 
 static const char _czech_tokenizer_range_lengths[] = {
-	0, 2, 1, 1, 1, 1, 1, 7, 
-	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 1, 1, 1, 1, 3, 1
+	0, 2, 1, 1, 2, 2, 2, 2,
+	2, 2, 2, 2, 0, 0, 1, 1,
+	1, 7, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 1, 0, 0, 1, 1,
+	1, 3, 1
 };
 
 static const unsigned char _czech_tokenizer_index_offsets[] = {
-	0, 0, 16, 28, 42, 45, 50, 53, 
-	82, 88, 93, 97, 102, 108, 110, 116, 
-	118, 124, 138, 145, 150, 153, 163
+	0, 0, 16, 28, 42, 45, 48, 51,
+	54, 57, 60, 63, 66, 68, 70, 73,
+	78, 81, 111, 117, 122, 126, 131, 137,
+	139, 145, 147, 153, 167, 169, 171, 178,
+	183, 186, 196
 };
 
 static const char _czech_tokenizer_indicies[] = {
-	1, 1, 2, 2, 2, 2, 2, 3, 
-	2, 3, 1, 2, 2, 1, 3, 0, 
-	2, 2, 2, 2, 2, 3, 2, 3, 
-	2, 2, 3, 0, 4, 4, 5, 5, 
-	5, 5, 5, 5, 5, 5, 4, 5, 
-	4, 0, 6, 6, 0, 7, 7, 8, 
-	8, 0, 8, 8, 0, 10, 11, 12, 
-	10, 13, 9, 13, 9, 13, 16, 16, 
-	16, 16, 10, 16, 15, 13, 9, 17, 
-	9, 17, 9, 15, 9, 16, 9, 16, 
-	9, 14, 10, 19, 20, 10, 10, 18, 
-	10, 21, 10, 10, 18, 10, 10, 10, 
-	18, 10, 21, 10, 10, 18, 10, 22, 
-	23, 10, 10, 18, 25, 24, 10, 22, 
-	26, 10, 10, 18, 25, 24, 10, 23, 
-	26, 10, 10, 18, 4, 4, 5, 5, 
-	5, 5, 5, 5, 5, 5, 4, 5, 
-	4, 27, 28, 28, 29, 29, 15, 15, 
-	27, 29, 29, 6, 6, 27, 8, 8, 
-	27, 16, 16, 16, 16, 16, 16, 16, 
-	16, 16, 27, 15, 15, 27, 0
+	1, 1, 2, 2, 2, 2, 2, 3,
+	2, 3, 1, 2, 2, 1, 3, 0,
+	2, 2, 2, 2, 2, 3, 2, 3,
+	2, 2, 3, 0, 4, 4, 5, 5,
+	5, 5, 5, 5, 5, 5, 4, 5,
+	4, 0, 6, 6, 0, 7, 7, 0,
+	8, 8, 0, 9, 9, 0, 10, 10,
+	0, 11, 11, 0, 12, 12, 0, 13,
+	13, 0, 14, 0, 15, 0, 16, 16,
+	0, 17, 17, 18, 18, 0, 18, 18,
+	0, 20, 21, 22, 20, 23, 24, 19,
+	23, 19, 23, 27, 27, 27, 27, 20,
+	27, 26, 23, 19, 28, 19, 28, 19,
+	26, 19, 27, 19, 27, 19, 25, 20,
+	30, 31, 20, 20, 29, 20, 32, 20,
+	20, 29, 20, 20, 20, 29, 20, 32,
+	20, 20, 29, 20, 33, 34, 20, 20,
+	29, 36, 35, 20, 33, 37, 20, 20,
+	29, 36, 35, 20, 34, 37, 20, 20,
+	29, 4, 4, 5, 5, 5, 5, 5,
+	5, 5, 5, 4, 5, 4, 38, 15,
+	38, 39, 38, 40, 40, 41, 41, 26,
+	26, 38, 41, 41, 16, 16, 38, 18,
+	18, 38, 27, 27, 27, 27, 27, 27,
+	27, 27, 27, 38, 26, 26, 38, 0
 };
 
 static const char _czech_tokenizer_trans_targs[] = {
-	7, 1, 2, 7, 1, 3, 19, 6, 
-	20, 7, 8, 12, 16, 17, 0, 18, 
-	21, 22, 7, 9, 11, 10, 13, 14, 
-	7, 7, 15, 7, 4, 5
+	17, 1, 2, 17, 1, 3, 5, 6,
+	7, 8, 9, 10, 11, 12, 29, 4,
+	31, 16, 32, 17, 18, 22, 26, 27,
+	28, 0, 30, 33, 34, 17, 19, 21,
+	20, 23, 24, 17, 17, 25, 17, 13,
+	14, 15
 };
 
 static const char _czech_tokenizer_trans_actions[] = {
-	1, 0, 0, 2, 3, 0, 4, 0, 
-	0, 7, 0, 0, 0, 4, 0, 4, 
-	0, 0, 8, 0, 0, 0, 0, 0, 
-	9, 10, 0, 11, 0, 0
+	21, 0, 0, 11, 1, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 7, 0,
+	7, 0, 0, 9, 0, 0, 0, 7,
+	7, 0, 7, 0, 0, 17, 0, 0,
+	0, 0, 0, 19, 13, 0, 15, 0,
+	0, 0
 };
 
 static const char _czech_tokenizer_to_state_actions[] = {
-	0, 0, 0, 0, 0, 0, 0, 5, 
-	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 3, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0
 };
 
 static const char _czech_tokenizer_from_state_actions[] = {
-	0, 0, 0, 0, 0, 0, 0, 6, 
-	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 5, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0
 };
 
 static const unsigned char _czech_tokenizer_eof_trans[] = {
-	0, 1, 1, 1, 1, 1, 1, 0, 
-	19, 19, 19, 19, 19, 25, 19, 25, 
-	19, 28, 28, 28, 28, 28, 28
+	0, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1,
+	1, 0, 30, 30, 30, 30, 30, 36,
+	30, 36, 30, 39, 39, 39, 39, 39,
+	39, 39, 39
 };
 
-static const int czech_tokenizer_start = 7;
+static const int czech_tokenizer_start = 17;
 
 
 
@@ -232,7 +269,7 @@ bool czech_tokenizer::next_sentence(vector<token_range>& tokens) {
   while (tokenize_url_email(tokens))
     if (emergency_sentence_split(tokens))
       return true;
-  
+
 	{
 	cs = czech_tokenizer_start;
 	ts = 0;
@@ -242,19 +279,25 @@ bool czech_tokenizer::next_sentence(vector<token_range>& tokens) {
 
 	{
 	int _klen;
-	const short *_keys;
-	int _trans;
+	unsigned int _trans;
 	short _widec;
+	const char *_acts;
+	unsigned int _nacts;
+	const short *_keys;
 
 	if ( ( current) == ( (chars.size() - 1)) )
 		goto _test_eof;
 	if ( cs == 0 )
 		goto _out;
 _resume:
-	switch ( _czech_tokenizer_from_state_actions[cs] ) {
-	case 6:
+	_acts = _czech_tokenizer_actions + _czech_tokenizer_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 2:
 	{ts = ( current);}
 	break;
+		}
 	}
 
 	_widec = ( ragel_char(chars[current]));
@@ -277,13 +320,13 @@ _resume:
 				switch ( _czech_tokenizer_cond_spaces[_czech_tokenizer_cond_offsets[cs] + ((_mid - _keys)>>1)] ) {
 	case 0: {
 		_widec = (short)(256u + (( ragel_char(chars[current])) - 0u));
-		if ( 
+		if (
  !current || (chars[current-1].cat & ~(unicode::L | unicode::M | unicode::N | unicode::Pd))  ) _widec += 256;
 		break;
 	}
 	case 1: {
 		_widec = (short)(768u + (( ragel_char(chars[current])) - 0u));
-		if ( 
+		if (
  !current || ((chars[current-1].cat & ~(unicode::L | unicode::M | unicode::N)) && chars[current-1].chr != '+')  ) _widec += 256;
 		break;
 	}
@@ -349,14 +392,19 @@ _eof_trans:
 	if ( _czech_tokenizer_trans_actions[_trans] == 0 )
 		goto _again;
 
-	switch ( _czech_tokenizer_trans_actions[_trans] ) {
-	case 3:
+	_acts = _czech_tokenizer_actions + _czech_tokenizer_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 0:
 	{ whitespace = current; }
 	break;
-	case 4:
+	case 3:
 	{te = ( current)+1;}
 	break;
-	case 7:
+	case 4:
 	{te = ( current)+1;{ tokens.emplace_back(ts, te - ts);
           merge_hyphenated(tokens);
           current = te;
@@ -366,7 +414,7 @@ _eof_trans:
           ( current)--;
         }}
 	break;
-	case 2:
+	case 5:
 	{te = ( current)+1;{
           bool eos = is_eos(tokens, chars[ts].chr, abbreviations);
           for (current = ts; current < whitespace; current++)
@@ -375,7 +423,7 @@ _eof_trans:
           if (eos) {( current)++; goto _out; }
         }}
 	break;
-	case 10:
+	case 6:
 	{te = ( current)+1;{
           if (!tokens.empty()) {( current)++; goto _out; }
           current = te;
@@ -385,7 +433,7 @@ _eof_trans:
           ( current)--;
         }}
 	break;
-	case 11:
+	case 7:
 	{te = ( current);( current)--;{ tokens.emplace_back(ts, te - ts);
           merge_hyphenated(tokens);
           current = te;
@@ -414,7 +462,7 @@ _eof_trans:
           ( current)--;
         }}
 	break;
-	case 1:
+	case 10:
 	{{( current) = ((te))-1;}{ tokens.emplace_back(ts, te - ts);
           merge_hyphenated(tokens);
           current = te;
@@ -424,13 +472,18 @@ _eof_trans:
           ( current)--;
         }}
 	break;
+		}
 	}
 
 _again:
-	switch ( _czech_tokenizer_to_state_actions[cs] ) {
-	case 5:
+	_acts = _czech_tokenizer_actions + _czech_tokenizer_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 	{ts = 0;}
 	break;
+		}
 	}
 
 	if ( cs == 0 )

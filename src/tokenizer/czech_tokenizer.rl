@@ -114,7 +114,10 @@ bool czech_tokenizer::next_sentence(vector<token_range>& tokens) {
     action unary_plus_allowed { !current || ((chars[current-1].cat & ~(unicode::L | unicode::M | unicode::N)) && chars[current-1].chr != '+') }
     whitespace = [\r\t\n] | u_Zs;
     eol = '\r' ('' >(eol,0) | '\n' >(eol,1)) | '\n' ('' >(eol,0) | '\r' >(eol,1));
-    word = u_L (u_L | u_M)*;
+    codepoint = [0-9a-f]{8};
+    start_grapheme_entity = '&' 'U' codepoint ';';
+    continue_grapheme_entity = '&' 'u' codepoint ';';
+    word = u_L (u_L | u_M)* | start_grapheme_entity continue_grapheme_entity*;
     number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? u_Nd+ ([.,] u_Nd+)? ([eE] [+\-]? u_Nd+)?;
 
     # Segmentation
